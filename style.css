@@ -41,7 +41,8 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  background-image: url(back.png), linear-gradient(135deg, #c9d088c0 0%, #6AA585c0 40%, #6AA585c0 60%, #D3D9B3c0 100%), url(noise.png);
+  background-image: url(statics/back.png), linear-gradient(135deg, #c9d088c0 0%, #6AA585c0 40%, #6AA585c0 60%, #D3D9B3c0 100%), url(statics/noise.png);
+  background-attachment: local;
 }
 
 /* =====================
