@@ -13,6 +13,10 @@ const closeSettings = document.getElementById('closeSettings');
 const intervalInput = document.getElementById('interval');
 const channelInput = document.getElementById('channel');
 
+// --- API Endpoints ---
+const API_READ_URL = 'apis/chat_read.php';
+const API_WRITE_URL = 'apis/chat_write.php';
+
 // --- Helper Functions ---
 const getLocal = key => localStorage.getItem(key);
 const setLocal = (key, value) => localStorage.setItem(key, value);
@@ -143,7 +147,7 @@ const Chat = {
 
   async fetchMessages() {
     try {
-      let url = `chat_read.php?from=${this.lastIndex}`;
+      let url = `${API_READ_URL}?from=${this.lastIndex}`;
       if (Settings.channel) url += `&channel=${encodeURIComponent(Settings.channel)}`;
       const res = await fetch(url);
       const data = await res.json();
@@ -193,7 +197,7 @@ const Chat = {
     formData.append('message', encrypted);
     formData.append('channel', Settings.channel);
     try {
-      const res = await fetch('chat_write.php', {
+      const res = await fetch(API_WRITE_URL, {
         method: 'POST',
         body: formData
       });
