@@ -5,8 +5,14 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 class Chat {
-    private static function get_msgs($channel, $from=0) {
-        $pdo = DB::get_chat_pdo();
+    private $db;
+
+    public function __construct(DB $db) {
+        $this->db = $db;
+    }
+
+    public function get_msgs($channel, $from=0) {
+        $pdo = $this->db->getPdo();
         $stmt = $pdo->prepare('SELECT timestamp, name, message FROM ' . Config::getChatTable() . ' WHERE channel = :channel ORDER BY id ASC LIMIT -1 OFFSET :from');
         $stmt->bindValue(':channel', $channel, \PDO::PARAM_STR);
         $stmt->bindValue(':from', $from, \PDO::PARAM_INT);
@@ -15,7 +21,7 @@ class Chat {
         return $messages;
     }
 
-    private static function send_msg($name, $message, $channel, $dbFile = null) {
+    public function send_msg($name, $message, $channel) {
         $entry = [
             'timestamp' => time(),
             'name' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8'),
@@ -23,9 +29,8 @@ class Chat {
             'channel' => htmlspecialchars($channel, ENT_QUOTES, 'UTF-8')
         ];
         try {
-            $pdo = DB::get_chat_pdo($dbFile);
-            DB::init($dbFile);
-            // Insert message
+            $this->db->init();
+            $pdo = $this->db->getPdo();
             $stmt = $pdo->prepare('INSERT INTO ' . Config::getChatTable() . ' (timestamp, name, message, channel) VALUES (:timestamp, :name, :message, :channel)');
             $stmt->execute([
                 ':timestamp' => $entry['timestamp'],

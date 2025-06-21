@@ -6,13 +6,18 @@ use Aslan\Chat\Constants;
 
 class ChatUnitTest extends TestCase {
     private $testDbFile;
+    const TEST_USER = 'Alice';
+    const TEST_MESSAGE = 'Hello';
+    const TEST_CHANNEL = 'testchan';
 
+    /**
+     * Set up a fresh SQLite database for each test.
+     */
     protected function setUp(): void {
         $this->testDbFile = __DIR__ . '/test_db.sqlite';
         if (file_exists($this->testDbFile)) {
             unlink($this->testDbFile);
         }
-        // Patch Constants::CHAT_DB_FILE for this test (not possible, so patch DB::$pdo)
         $pdo = new PDO('sqlite:' . $this->testDbFile);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->exec('CREATE TABLE IF NOT EXISTS messages (
@@ -22,56 +27,62 @@ class ChatUnitTest extends TestCase {
             message TEXT NOT NULL,
             channel TEXT NOT NULL DEFAULT "default"
         )');
-        $ref = new ReflectionClass(DB::class);
-        $prop = $ref->getProperty('pdo');
-        $prop->setAccessible(true);
-        $prop->setValue(null, $pdo);
     }
 
+    /**
+     * Clean up the test database after each test.
+     */
     protected function tearDown(): void {
-        $ref = new ReflectionClass(DB::class);
-        $prop = $ref->getProperty('pdo');
-        $prop->setAccessible(true);
-        $prop->setValue(null, null);
         if (file_exists($this->testDbFile)) {
             unlink($this->testDbFile);
         }
     }
 
-    public function testSendMsgInsertsMessage() {
-        $ref = new ReflectionClass(Chat::class);
-        $method = $ref->getMethod('send_msg');
-        $method->setAccessible(true);
-        $result = $method->invoke(null, 'Alice', 'Hello', 'testchan');
+    /**
+     * Helper to call private static Chat methods via Reflection.
+     */
+    private function callChatMethod($method, ...$args) {
+        $db = new DB($this->testDbFile);
+        $chat = new Chat($db);
+        $ref = new \ReflectionClass(Chat::class);
+        $meth = $ref->getMethod($method);
+        $meth->setAccessible(true);
+        return $meth->invokeArgs($chat, $args);
+    }
+
+    /**
+     * Test that send_msg inserts a message into the database.
+     */
+    public function test_send_msg_inserts_message_into_database() {
+        $result = $this->callChatMethod('send_msg', self::TEST_USER, self::TEST_MESSAGE, self::TEST_CHANNEL);
         $this->assertTrue($result);
         $pdo = new PDO('sqlite:' . $this->testDbFile);
-        $stmt = $pdo->query('SELECT * FROM messages WHERE name = "Alice" AND message = "Hello" AND channel = "testchan"');
+        $stmt = $pdo->query('SELECT * FROM messages WHERE name = "' . self::TEST_USER . '" AND message = "' . self::TEST_MESSAGE . '" AND channel = "' . self::TEST_CHANNEL . '"');
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->assertNotEmpty($row);
     }
 
-    public function testGetMsgsReturnsInsertedMessages() {
-        // Insert a message first
+    /**
+     * Test that get_msgs returns inserted messages.
+     */
+    public function test_get_msgs_returns_inserted_messages() {
         $pdo = new PDO('sqlite:' . $this->testDbFile);
         $pdo->exec('INSERT INTO messages (timestamp, name, message, channel) VALUES (123456, "Bob", "Hi", "chan2")');
-        $ref = new ReflectionClass(Chat::class);
-        $method = $ref->getMethod('get_msgs');
-        $method->setAccessible(true);
-        $msgs = $method->invoke(null, 'chan2', 0);
+        $msgs = $this->callChatMethod('get_msgs', 'chan2', 0);
         $this->assertNotEmpty($msgs);
         $this->assertEquals('Bob', $msgs[0]['name']);
         $this->assertEquals('Hi', $msgs[0]['message']);
         $this->assertEquals(123456, $msgs[0]['timestamp']);
     }
 
-    public function testSendMsgSanitizesInput() {
-        $ref = new ReflectionClass(Chat::class);
-        $method = $ref->getMethod('send_msg');
-        $method->setAccessible(true);
+    /**
+     * Test that send_msg sanitizes input.
+     */
+    public function test_send_msg_sanitizes_input() {
         $name = '<b>Alice</b>';
         $message = '<script>alert(1)</script>';
         $channel = 'chan<script>';
-        $result = $method->invoke(null, $name, $message, $channel);
+        $result = $this->callChatMethod('send_msg', $name, $message, $channel);
         $this->assertTrue($result);
         $pdo = new PDO('sqlite:' . $this->testDbFile);
         $stmt = $pdo->query('SELECT * FROM messages WHERE channel = "chan&lt;script&gt;"');
@@ -80,64 +91,76 @@ class ChatUnitTest extends TestCase {
         $this->assertStringNotContainsString('<', $row['message']);
     }
 
-    public function testSendMsgReturnsFalseOnDbError() {
-        $ref = new ReflectionClass(Chat::class);
-        $method = $ref->getMethod('send_msg');
-        $method->setAccessible(true);
-        // Close PDO connection to simulate error
-        $refDB = new ReflectionClass(DB::class);
-        $prop = $refDB->getProperty('pdo');
-        $prop->setAccessible(true);
-        $prop->setValue(null, null);
-        // Use an invalid DB file path
-        $result = $method->invoke(null, 'A', 'B', 'chan', '/invalid/path/doesnotexist.sqlite');
-        $this->assertFalse($result);
+    /**
+     * Test that send_msg returns false on DB error.
+     */
+    public function test_send_msg_returns_false_on_db_error() {
+        $this->expectException(\PDOException::class);
+        $db = new DB('/invalid/path/doesnotexist.sqlite');
+        $chat = new Chat($db);
+        $chat->send_msg('A', 'B', 'chan');
     }
 
-    public function testGetMsgsWithOffset() {
+    /**
+     * Test get_msgs with offset returns correct messages.
+     */
+    public function test_get_msgs_with_offset() {
         $pdo = new PDO('sqlite:' . $this->testDbFile);
         $pdo->exec('INSERT INTO messages (timestamp, name, message, channel) VALUES (1, "A", "M1", "chan")');
         $pdo->exec('INSERT INTO messages (timestamp, name, message, channel) VALUES (2, "B", "M2", "chan")');
         $pdo->exec('INSERT INTO messages (timestamp, name, message, channel) VALUES (3, "C", "M3", "chan")');
-        $ref = new ReflectionClass(Chat::class);
-        $method = $ref->getMethod('get_msgs');
-        $method->setAccessible(true);
-        $msgs = $method->invoke(null, 'chan', 2);
+        $msgs = $this->callChatMethod('get_msgs', 'chan', 2);
         $this->assertCount(1, $msgs);
         $this->assertEquals('C', $msgs[0]['name']);
     }
 
-    public function testGetMsgsWithNoResults() {
-        $ref = new ReflectionClass(Chat::class);
-        $method = $ref->getMethod('get_msgs');
-        $method->setAccessible(true);
-        $msgs = $method->invoke(null, 'emptychan', 0);
+    /**
+     * Test get_msgs returns empty array for no results.
+     */
+    public function test_get_msgs_with_no_results() {
+        $msgs = $this->callChatMethod('get_msgs', 'emptychan', 0);
         $this->assertIsArray($msgs);
         $this->assertCount(0, $msgs);
     }
 
-    public function testSendMsgWithEmptyNameOrMessage() {
-        $ref = new ReflectionClass(Chat::class);
-        $method = $ref->getMethod('send_msg');
-        $method->setAccessible(true);
-        $result1 = $method->invoke(null, '', 'msg', 'chan');
-        $result2 = $method->invoke(null, 'name', '', 'chan');
+    /**
+     * Test send_msg with empty name or message.
+     */
+    public function test_send_msg_with_empty_name_or_message() {
+        $result1 = $this->callChatMethod('send_msg', '', 'msg', 'chan');
+        $result2 = $this->callChatMethod('send_msg', 'name', '', 'chan');
         $this->assertTrue($result1); // DB layer does not validate, only HTTP layer
         $this->assertTrue($result2);
     }
 
-    public function testSendMsgWithLongInputs() {
-        $ref = new ReflectionClass(Chat::class);
-        $method = $ref->getMethod('send_msg');
-        $method->setAccessible(true);
+    /**
+     * Test send_msg with long inputs.
+     */
+    public function test_send_msg_with_long_inputs() {
         $longName = str_repeat('a', 1000);
         $longMsg = str_repeat('b', 5000);
         $longChan = str_repeat('c', 100);
-        $result = $method->invoke(null, $longName, $longMsg, $longChan);
+        $result = $this->callChatMethod('send_msg', $longName, $longMsg, $longChan);
         $this->assertTrue($result);
         $pdo = new PDO('sqlite:' . $this->testDbFile);
         $stmt = $pdo->query('SELECT * FROM messages WHERE name = "' . $longName . '"');
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->assertNotEmpty($row);
+    }
+
+    /**
+     * Test send_msg with SQL injection attempt (should be sanitized).
+     */
+    public function test_send_msg_with_sql_injection_attempt() {
+        $maliciousName = 'Robert"); DROP TABLE messages;--';
+        $result = $this->callChatMethod('send_msg', $maliciousName, 'test', 'chan');
+        $this->assertTrue($result);
+        $pdo = new PDO('sqlite:' . $this->testDbFile);
+        $stmt = $pdo->query('SELECT * FROM messages WHERE name LIKE "%Robert%"');
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->assertNotEmpty($row);
+        // Table should still exist
+        $tables = $pdo->query('SELECT name FROM sqlite_master WHERE type="table" AND name="messages"')->fetchAll(PDO::FETCH_ASSOC);
+        $this->assertNotEmpty($tables);
     }
 } 
