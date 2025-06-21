@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class Chat {
     private static function get_msgs($channel, $from=0) {
         $pdo = DB::get_chat_pdo();
-        $stmt = $pdo->prepare('SELECT timestamp, name, message FROM ' . Constants::CHAT_TABLE . ' WHERE channel = :channel ORDER BY id ASC LIMIT -1 OFFSET :from');
+        $stmt = $pdo->prepare('SELECT timestamp, name, message FROM ' . Config::getChatTable() . ' WHERE channel = :channel ORDER BY id ASC LIMIT -1 OFFSET :from');
         $stmt->bindValue(':channel', $channel, \PDO::PARAM_STR);
         $stmt->bindValue(':from', $from, \PDO::PARAM_INT);
         $stmt->execute();
@@ -15,7 +15,7 @@ class Chat {
         return $messages;
     }
 
-    private static function send_msg($name, $message, $channel) {
+    private static function send_msg($name, $message, $channel, $dbFile = null) {
         $entry = [
             'timestamp' => time(),
             'name' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8'),
@@ -23,11 +23,10 @@ class Chat {
             'channel' => htmlspecialchars($channel, ENT_QUOTES, 'UTF-8')
         ];
         try {
-            $pdo = DB::get_chat_pdo();
-            DB::init();
-    
+            $pdo = DB::get_chat_pdo($dbFile);
+            DB::init($dbFile);
             // Insert message
-            $stmt = $pdo->prepare('INSERT INTO ' . Constants::CHAT_TABLE . ' (timestamp, name, message, channel) VALUES (:timestamp, :name, :message, :channel)');
+            $stmt = $pdo->prepare('INSERT INTO ' . Config::getChatTable() . ' (timestamp, name, message, channel) VALUES (:timestamp, :name, :message, :channel)');
             $stmt->execute([
                 ':timestamp' => $entry['timestamp'],
                 ':name' => $entry['name'],
@@ -35,7 +34,7 @@ class Chat {
                 ':channel' => $entry['channel']
             ]);
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -43,7 +42,7 @@ class Chat {
     public static function read(Request $request, Response $response, $args) {
         $params = $request->getQueryParams();
         $from = isset($params['from']) ? intval($params['from']) : 0;
-        $channel = isset($params['channel']) ? trim($params['channel']) : Constants::CHAT_DEFAULT_CHANNEL;
+        $channel = isset($params['channel']) ? trim($params['channel']) : Config::getChatDefaultChannel();
         
         $messages = self::get_msgs($channel, $from);
     
@@ -57,7 +56,7 @@ class Chat {
     
         $name = isset($post_data['name']) ? trim($post_data['name']) : '';
         $message = isset($post_data['message']) ? trim($post_data['message']) : '';
-        $channel = isset($post_data['channel']) ? trim($post_data['channel']) : Constants::CHAT_DEFAULT_CHANNEL;
+        $channel = isset($post_data['channel']) ? trim($post_data['channel']) : Config::getChatDefaultChannel();
     
         if ($name === '' || $message === '') {
             http_response_code(400);
