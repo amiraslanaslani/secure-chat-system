@@ -1,0 +1,25 @@
+{
+  "name": "encrypted-chat-app",
+  "version": "1.0.0",
+  "description": "A secure encrypted chat application",
+  "main": "dist/main.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "dev": "tsc && serve .",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "serve": "^14.2.1"
+  },
+  "keywords": [
+    "chat",
+    "encryption",
+    "typescript",
+    "security"
+  ],
+  "author": "",
+  "license": "MIT"
+}
