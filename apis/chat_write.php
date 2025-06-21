@@ -1,9 +1,10 @@
 <?php
-// chat_write.php
-
-header('Content-Type: application/json');
+namespace Chat\Apis;
 require_once __DIR__ . '/consts.php';
 require_once __DIR__ . '/db.php';
+
+header('Content-Type: application/json');
+use function Chat\DB\get_chat_pdo;
 
 // Check request method
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
