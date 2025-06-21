@@ -192,14 +192,18 @@ const Chat = {
     setLocal('rememberedName', name);
     setLocal('rememberedPassword', password);
     const encrypted = await Encryption.encrypt(password, message);
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('message', encrypted);
-    formData.append('channel', Settings.channel);
+    const payload = JSON.stringify({
+      name: name,
+      message: encrypted,
+      channel: Settings.channel
+    });
     try {
       const res = await fetch(API_WRITE_URL, {
         method: 'POST',
-        body: formData
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: payload
       });
       const result = await res.json();
       sendButton.innerHTML = '➤';

@@ -30,7 +30,13 @@ $app->get('chat/read', function ($request, $response, $args) {
 $app->post('chat/send', function ($request, $response, $args) {
     $db = new \Aslan\Chat\DB();
     $chat = new \Aslan\Chat\Chat($db);
-    $post_data = $request->getParsedBody();
+    // Accept JSON payloads
+    $contentType = $request->getHeaderLine('Content-Type');
+    if (strpos($contentType, 'application/json') !== false) {
+        $post_data = json_decode($request->getBody()->getContents(), true);
+    } else {
+        $post_data = $request->getParsedBody();
+    }
     $name = isset($post_data['name']) ? trim($post_data['name']) : '';
     $message = isset($post_data['message']) ? trim($post_data['message']) : '';
     $channel = isset($post_data['channel']) ? trim($post_data['channel']) : Config::getChatDefaultChannel();
