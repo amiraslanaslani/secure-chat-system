@@ -3,11 +3,15 @@ namespace Aslan\Chat;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Aslan\Chat\DB as DB;
 
 class Chat {
     private $db;
 
-    public function __construct(DB $db) {
+    public function __construct(DB $db=null) {
+        if(is_null($db)){
+            $db = new DB();
+        }
         $this->db = $db;
     }
 
@@ -49,7 +53,7 @@ class Chat {
         $from = isset($params['from']) ? intval($params['from']) : 0;
         $channel = isset($params['channel']) ? trim($params['channel']) : Config::getChatDefaultChannel();
         
-        $messages = self::get_msgs($channel, $from);
+        $messages = (new Chat())->get_msgs($channel, $from);
     
         $response->getBody()->write(json_encode($messages));
         return $response->withHeader('Content-Type', 'application/json');
@@ -69,7 +73,7 @@ class Chat {
             return $response->withStatus(200);
         }
 
-        $result = self::send_msg($name, $message, $channel);
+        $result = (new Chat())->send_msg($name, $message, $channel);
         if($result) {
             $response->getBody()->write(json_encode(['success' => true]));
             return $response;
