@@ -1,10 +1,4 @@
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-
-  # Allow direct access to chat_read.php and chat_write.php
-  RewriteCond %{REQUEST_URI} !/chat_read\.php$
-  RewriteCond %{REQUEST_URI} !/chat_write\.php$
-  
-  # Deny all other access
-  RewriteRule ^ - [F]
-</IfModule>
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]

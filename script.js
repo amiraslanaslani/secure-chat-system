@@ -14,8 +14,8 @@ const intervalInput = document.getElementById('interval');
 const channelInput = document.getElementById('channel');
 
 // --- API Endpoints ---
-const API_READ_URL = 'apis/chat_read.php';
-const API_WRITE_URL = 'apis/chat_write.php';
+const API_READ_URL = 'apis/chat/read';
+const API_WRITE_URL = 'apis/chat/send';
 
 // --- Helper Functions ---
 const getLocal = key => localStorage.getItem(key);

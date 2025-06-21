@@ -1,0 +1,77 @@
+<?php
+namespace Aslan\Chat;
+
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
+class Chat {
+    private static function get_msgs($channel, $from=0) {
+        $pdo = DB::get_chat_pdo();
+        $stmt = $pdo->prepare('SELECT timestamp, name, message FROM ' . Constants::CHAT_TABLE . ' WHERE channel = :channel ORDER BY id ASC LIMIT -1 OFFSET :from');
+        $stmt->bindValue(':channel', $channel, \PDO::PARAM_STR);
+        $stmt->bindValue(':from', $from, \PDO::PARAM_INT);
+        $stmt->execute();
+        $messages = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $messages;
+    }
+
+    private static function send_msg($name, $message, $channel) {
+        $entry = [
+            'timestamp' => time(),
+            'name' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8'),
+            'message' => htmlspecialchars($message, ENT_QUOTES, 'UTF-8'),
+            'channel' => htmlspecialchars($channel, ENT_QUOTES, 'UTF-8')
+        ];
+        try {
+            $pdo = DB::get_chat_pdo();
+            DB::init();
+    
+            // Insert message
+            $stmt = $pdo->prepare('INSERT INTO ' . Constants::CHAT_TABLE . ' (timestamp, name, message, channel) VALUES (:timestamp, :name, :message, :channel)');
+            $stmt->execute([
+                ':timestamp' => $entry['timestamp'],
+                ':name' => $entry['name'],
+                ':message' => $entry['message'],
+                ':channel' => $entry['channel']
+            ]);
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public static function read(Request $request, Response $response, $args) {
+        $params = $request->getQueryParams();
+        $from = isset($params['from']) ? intval($params['from']) : 0;
+        $channel = isset($params['channel']) ? trim($params['channel']) : Constants::CHAT_DEFAULT_CHANNEL;
+        
+        $messages = self::get_msgs($channel, $from);
+    
+        $response->getBody()->write(json_encode($messages));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public static function send(Request $request, Response $response, $args) {
+        $response->withHeader('Content-Type', 'application/json');
+        $post_data = $request->getParsedBody();
+    
+        $name = isset($post_data['name']) ? trim($post_data['name']) : '';
+        $message = isset($post_data['message']) ? trim($post_data['message']) : '';
+        $channel = isset($post_data['channel']) ? trim($post_data['channel']) : Constants::CHAT_DEFAULT_CHANNEL;
+    
+        if ($name === '' || $message === '') {
+            http_response_code(400);
+            $response->getBody()->write(json_encode(['error' => 'Name and message are required.']));
+            return $response->withStatus(200);
+        }
+
+        $result = self::send_msg($name, $message, $channel);
+        if($result) {
+            $response->getBody()->write(json_encode(['success' => true]));
+            return $response;
+        } else {
+            $response->getBody()->write(json_encode(['error' => 'Database error.']));
+            return $response->withStatus(500);
+        }
+    }
+}
