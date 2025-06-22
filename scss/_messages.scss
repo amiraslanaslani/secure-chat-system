@@ -1,0 +1,41 @@
+/* =====================
+   Message Bubbles
+====================== */
+.message-row {
+  display: flex;
+  width: 100%;
+}
+
+.message {
+  max-width: 80%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  word-wrap: break-word;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.15);
+  position: relative;
+
+  .name {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .time {
+    color: #999;
+    font-size: 0.7rem;
+    margin-top: 0.3rem;
+    display: block;
+  }
+
+  &.user {
+    background-color: var(--my-message-bg);
+    margin-left: auto;
+    text-align: right;
+  }
+
+  &.other {
+    background-color: #fff;
+    margin-right: auto;
+    text-align: left;
+  }
+} 

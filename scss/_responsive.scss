@@ -1,0 +1,73 @@
+/* =====================
+   Responsive Styles
+====================== */
+@media (max-width: 600px) {
+  .chat-form {
+    #message {
+      flex: 1 1 auto;
+    }
+    
+    button[type="submit"] {
+      flex: 0 0 auto;
+    }
+  }
+
+  #chat-trigger {
+    flex: 1 1 100%;
+    padding: 0;
+
+    a::before {
+      padding: 0 20px;
+    }
+
+    &.open a::before {
+      content: "▲";
+    }
+
+    &.close a::before {
+      content: "▼";
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  .chat-form {
+    flex-wrap: nowrap;
+
+    input[type="text"],
+    input[type="password"] {
+      flex: 1;
+    }
+
+    button {
+      flex: 0 0 auto;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .settings-content {
+    min-width: unset;
+    width: 95vw;
+    max-width: 98vw;
+    padding: 1rem 0.7rem;
+    border-radius: 8px;
+    font-size: 0.98rem;
+
+    h2 {
+      font-size: 1.2rem;
+    }
+
+    button {
+      font-size: 0.98rem;
+      padding: 0.5rem 0.7rem;
+    }
+
+    input[type="number"],
+    input[type="text"] {
+      width: calc(100% - 1rem);
+      font-size: 0.98rem;
+      padding: 0.4rem;
+    }
+  }
+} 

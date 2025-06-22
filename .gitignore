@@ -6,6 +6,10 @@ chat_data.sqlite
 project/statics/js/
 *.tsbuildinfo
 
+# Sass build output
+project/statics/css/*.css
+project/statics/css/*.css.map
+
 # Dependencies
 node_modules/
 

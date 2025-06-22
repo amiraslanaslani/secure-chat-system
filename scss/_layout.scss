@@ -1,0 +1,22 @@
+/* =====================
+   Layout
+====================== */
+.chat-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 56px);
+  width: 100%;
+  margin-top: 56px;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-image: url(../images/back.png), linear-gradient(135deg, #c9d088c0 0%, #6AA585c0 40%, #6AA585c0 60%, #D3D9B3c0 100%), url(../images/noise.png);
+  background-attachment: local;
+} 

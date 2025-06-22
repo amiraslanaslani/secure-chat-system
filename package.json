@@ -5,14 +5,17 @@
   "main": "project/statics/js/main.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && sass scss/main.scss project/statics/css/style.css",
+    "build:css": "sass scss/main.scss project/statics/css/style.css",
+    "build:css:watch": "sass --watch scss/main.scss project/statics/css/style.css",
     "watch": "tsc --watch",
-    "dev": "tsc && serve .",
+    "dev": "tsc && sass scss/main.scss project/statics/css/style.css && serve .",
     "clean": "rm -rf dist"
   },
   "devDependencies": {
     "typescript": "^5.8.3",
-    "serve": "^14.2.1"
+    "serve": "^14.2.1",
+    "sass": "^1.71.1"
   },
   "keywords": [
     "chat",

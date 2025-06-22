@@ -1,0 +1,21 @@
+/* =====================
+   Main SCSS File
+   Imports all partial files
+====================== */
+
+// Variables and base styles
+@use 'variables';
+@use 'base';
+
+// Layout components
+@use 'layout';
+
+// UI Components
+@use 'top-bar';
+@use 'messages';
+@use 'chat-form';
+@use 'chat-trigger';
+@use 'settings-modal';
+
+// Responsive styles (should be last)
+@use 'responsive'; 

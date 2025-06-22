@@ -1,0 +1,22 @@
+/* =====================
+   Chat Trigger
+====================== */
+#chat-trigger {
+  text-align: center;
+  margin: 0 auto;
+  color: #888;
+  cursor: pointer;
+  padding: 8px 0;
+
+  a::before {
+    padding: 0 0;
+  }
+
+  &.open a::before {
+    content: "◄";
+  }
+
+  &.close a::before {
+    content: "►";
+  }
+} 

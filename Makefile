@@ -3,3 +3,6 @@ test:
 build:
 	npm run clean
 	npm run build
+css:
+	npm run build:css
+all: css build

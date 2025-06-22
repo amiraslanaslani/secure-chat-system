@@ -1,0 +1,39 @@
+/* =====================
+   Top Bar
+====================== */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: #FBFBFB;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  z-index: 1100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.channel-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.settings-btn {
+  position: static;
+  margin-left: auto;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  box-shadow: none;
+  font-size: 2rem;
+  cursor: pointer;
+
+  img {
+    height: 40px;
+    display: block;
+  }
+} 
