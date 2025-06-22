@@ -55,6 +55,7 @@ export class ChatService {
     if (this.fetchIntervalId) {
       clearInterval(this.fetchIntervalId);
     }
+    this.fetchMessages()
     this.fetchIntervalId = window.setInterval(
       () => this.fetchMessages(),
       SettingsService.messageInterval
