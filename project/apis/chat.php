@@ -48,7 +48,7 @@ class Chat {
         }
     }
 
-    public static function read(Request $request, Response $response, $args) {
+    public function read(Request $request, Response $response, $args) {
         $params = $request->getQueryParams();
         $from = isset($params['from']) ? intval($params['from']) : 0;
         $channel = isset($params['channel']) ? trim($params['channel']) : Config::getChatDefaultChannel();
@@ -59,7 +59,7 @@ class Chat {
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public static function send(Request $request, Response $response, $args) {
+    public function send(Request $request, Response $response, $args) {
         $response->withHeader('Content-Type', 'application/json');
         $post_data = $request->getParsedBody();
     

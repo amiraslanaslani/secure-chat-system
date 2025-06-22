@@ -21,8 +21,9 @@ class ChatIntegrationTest extends TestCase {
     protected function setUp(): void {
         Config::setApiPrefixPath("/apis/");
 
-        (new DB())->init();
-        $app = new App();
+        $db = new DB(DB::IN_MEMORY_PDO_DSN);
+        $db->init();
+        $app = new App($db);
         $this->app = $app->app;
     }
 

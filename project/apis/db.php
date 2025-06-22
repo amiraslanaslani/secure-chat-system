@@ -4,6 +4,8 @@ namespace Aslan\Chat;
 use Aslan\Chat\Config as Config;
 
 class DB {
+    const IN_MEMORY_PDO_DSN = "sqlite::memory:";
+
     private $pdo = null;
 
     /**

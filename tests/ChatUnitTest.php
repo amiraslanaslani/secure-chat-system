@@ -14,7 +14,7 @@ class ChatUnitTest extends TestCase {
      * Set up a fresh SQLite database for each test.
      */
     protected function setUp(): void {
-       $this->db = new DB("sqlite::memory:");
+       $this->db = new DB(DB::IN_MEMORY_PDO_DSN);
        $this->db->init();
     }
 
