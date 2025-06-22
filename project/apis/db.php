@@ -9,12 +9,10 @@ class DB {
     /**
      * Constructor can accept a PDO object or a file path (string).
      */
-    public function __construct($pdoOrFile = null) {
-        if ($pdoOrFile instanceof \PDO) {
-            $this->pdo = $pdoOrFile;
-        } elseif (is_string($pdoOrFile) || $pdoOrFile === null) {
-            $file = $pdoOrFile ?? Config::getChatDbFile();
-            $this->pdo = $this->createPdo($file);
+    public function __construct($pdoDsn = null) {
+        if (is_string($pdoDsn) || $pdoDsn === null) {
+            $dsn = $pdoDsn ?? Config::getPdoDsn();
+            $this->pdo = $this->createPdo($dsn);
         } else {
             throw new \InvalidArgumentException('Invalid argument for DB constructor');
         }
@@ -23,8 +21,8 @@ class DB {
     /**
      * Instance: Create a new PDO for a given file.
      */
-    private function createPdo($file) {
-        $pdo = new \PDO('sqlite:' . $file);
+    private function createPdo($dsn) {
+        $pdo = new \PDO($dsn);
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         return $pdo;
     }
