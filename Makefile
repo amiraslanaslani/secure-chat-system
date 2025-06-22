@@ -1,8 +1,8 @@
 test:
 	vendor/bin/phpunit --bootstrap tests/bootstrap.php tests
-build:
+js:
 	npm run clean
-	npm run build
+	npm run build:js
 css:
 	npm run build:css
-all: css build
+all: css js

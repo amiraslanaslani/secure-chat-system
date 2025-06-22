@@ -7,10 +7,11 @@
   "scripts": {
     "build": "tsc && sass scss/main.scss project/statics/css/style.css",
     "build:css": "sass scss/main.scss project/statics/css/style.css",
+    "build:js": "tsc",
     "build:css:watch": "sass --watch scss/main.scss project/statics/css/style.css",
     "watch": "tsc --watch",
     "dev": "tsc && sass scss/main.scss project/statics/css/style.css && serve .",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf project/statics/js"
   },
   "devDependencies": {
     "typescript": "^5.8.3",
