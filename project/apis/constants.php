@@ -2,7 +2,7 @@
 namespace Aslan\Chat;
 
 class Constants {
-    const API_PREFIX_PATH = "/chat/apis/";
+    const API_PREFIX_PATH = "/chat/project/apis/";
 
     const CHAT_DB_FILE = "../chat_data.sqlite";
     const CHAT_TABLE = "messages";

@@ -2,7 +2,7 @@
   "name": "encrypted-chat-app",
   "version": "1.0.0",
   "description": "A secure encrypted chat application",
-  "main": "dist/main.js",
+  "main": "project/statics/js/main.js",
   "type": "module",
   "scripts": {
     "build": "tsc",

@@ -3,7 +3,7 @@ chat_data.sqlite
 /vendor/
 
 # TypeScript build output
-dist/
+project/statics/js/
 *.tsbuildinfo
 
 # Dependencies

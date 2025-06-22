@@ -7,7 +7,7 @@ use Slim\Factory\AppFactory;
 use Aslan\Chat\Config as Config;
 use Aslan\Chat\DB as DB;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
 $app = AppFactory::create();
 
