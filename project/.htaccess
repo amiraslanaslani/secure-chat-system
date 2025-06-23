@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^vendor(/|$) - [F,L]
+RewriteRule ^.*.sqlite$ - [F,L]

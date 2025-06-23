@@ -4,7 +4,7 @@ namespace Aslan\Chat;
 use Aslan\Chat\App as App;
 use Aslan\Chat\DB as DB;
 
-require __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 function main() {
     $db = new DB();

@@ -7,8 +7,6 @@ use Aslan\Chat\Config;
 use Aslan\Chat\DB;
 use Aslan\Chat\App;
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
 class ChatIntegrationTest extends TestCase {
     private $app;
     const TEST_USER = 'TestUser';

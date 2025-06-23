@@ -1,5 +1,5 @@
 test:
-	vendor/bin/phpunit --bootstrap tests/bootstrap.php tests
+	project/vendor/bin/phpunit --bootstrap tests/bootstrap.php tests
 js:
 	npm run clean
 	npm run build:js
