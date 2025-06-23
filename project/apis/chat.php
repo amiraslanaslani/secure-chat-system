@@ -67,10 +67,15 @@ class Chat {
         $message = isset($post_data['message']) ? trim($post_data['message']) : '';
         $channel = isset($post_data['channel']) ? trim($post_data['channel']) : Config::getChatDefaultChannel();
     
-        if ($name === '' || $message === '') {
+        if ($name === '' || $message === '' || $channel === '') {
             http_response_code(400);
-            $response->getBody()->write(json_encode(['error' => 'Name and message are required.']));
+            $response->getBody()->write(json_encode(['error' => 'Name, message and channel fields are required.']));
             return $response->withStatus(200);
+        }
+
+        if (Config::isOnlyAllowedChannels() && !in_array($channel, Config::getAllowedChannels(), true)) {
+            $response->getBody()->write(json_encode(['error' => 'There is no ' . $channel . ' channel.']));
+            return $response->withStatus(404);
         }
 
         $result = (new Chat())->send_msg($name, $message, $channel);

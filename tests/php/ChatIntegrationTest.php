@@ -18,6 +18,8 @@ class ChatIntegrationTest extends TestCase {
      */
     protected function setUp(): void {
         Config::setApiPrefixPath("/apis/");
+        // Disable authentication for testing
+        Config::setPrivateChannelPassword([]);
 
         $db = new DB(DB::IN_MEMORY_PDO_DSN);
         $db->init();

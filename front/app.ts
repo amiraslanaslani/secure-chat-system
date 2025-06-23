@@ -42,7 +42,12 @@ export class ChatApp {
       closeSettings: document.getElementById('closeSettings') as HTMLElement,
       intervalInput: document.getElementById('interval') as HTMLInputElement,
       channelInput: document.getElementById('channel') as HTMLInputElement,
-      chatTrigger: document.getElementById('chat-trigger') as HTMLElement || undefined
+      chatTrigger: document.getElementById('chat-trigger') as HTMLElement || undefined,
+      passwordModal: document.getElementById('passwordModal') as HTMLElement,
+      passwordModalInput: document.getElementById('passwordModalInput') as HTMLInputElement,
+      passwordModalConfirm: document.getElementById('passwordModalConfirm') as HTMLElement,
+      passwordModalCancel: document.getElementById('passwordModalCancel') as HTMLElement,
+      passwordModalError: document.getElementById('passwordModalError') as HTMLElement
     };
   }
 

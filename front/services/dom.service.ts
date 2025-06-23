@@ -114,4 +114,54 @@ export class DOMService {
       channel: this.elements.channelInput.value.trim() || 'default'
     };
   }
-} 
+
+  getChannelPasswordFromUser(): Promise<string | null> {
+    return new Promise((resolve) => {
+      const modal = this.elements.passwordModal;
+      const input = this.elements.passwordModalInput;
+      const confirmBtn = this.elements.passwordModalConfirm;
+      const cancelBtn = this.elements.passwordModalCancel;
+      const errorDiv = this.elements.passwordModalError;
+
+      input.value = '';
+      errorDiv.style.display = 'none';
+      modal.style.display = 'flex';
+      input.focus();
+
+      const onConfirm = () => {
+        const value = input.value.trim();
+        if (!value) {
+          errorDiv.style.display = 'block';
+          return;
+        }
+        cleanup();
+        modal.style.display = 'none';
+        resolve(value);
+      };
+
+      const onCancel = () => {
+        cleanup();
+        modal.style.display = 'none';
+        resolve(null);
+      };
+
+      function cleanup() {
+        confirmBtn.removeEventListener('click', onConfirm);
+        cancelBtn.removeEventListener('click', onCancel);
+        input.removeEventListener('keydown', onKeyDown);
+      }
+
+      function onKeyDown(e: KeyboardEvent) {
+        if (e.key === 'Enter') {
+          onConfirm();
+        } else if (e.key === 'Escape') {
+          onCancel();
+        }
+      }
+
+      confirmBtn.addEventListener('click', onConfirm);
+      cancelBtn.addEventListener('click', onCancel);
+      input.addEventListener('keydown', onKeyDown);
+    });
+  }
+}

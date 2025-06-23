@@ -36,4 +36,9 @@ export interface DOMElements {
   intervalInput: HTMLInputElement;
   channelInput: HTMLInputElement;
   chatTrigger?: HTMLElement;
+  passwordModal: HTMLElement;
+  passwordModalInput: HTMLInputElement;
+  passwordModalConfirm: HTMLElement;
+  passwordModalCancel: HTMLElement;
+  passwordModalError: HTMLElement;
 } 

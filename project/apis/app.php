@@ -8,6 +8,7 @@ use Slim\Factory\AppFactory;
 use Aslan\Chat\Config as Config;
 use Aslan\Chat\DB as DB;
 use Aslan\Chat\Chat as Chat;
+use Aslan\Chat\ChannelAuthMiddleware as ChannelAuthMiddleware;
 
 class App{
     public $app = null;
@@ -22,6 +23,9 @@ class App{
         $chat = new Chat($db);
         $this->app->get('chat/read', [$chat, 'read']);
         $this->app->post('chat/send', [$chat, 'send']);
+
+        // Add authorization middleware
+        $this->app->add(new ChannelAuthMiddleware());
     }
 
     public function run() {

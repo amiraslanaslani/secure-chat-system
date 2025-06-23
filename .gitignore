@@ -1,6 +1,7 @@
 chat_data.sqlite
 *.psd
 /project/vendor/
+*.cache
 
 # TypeScript build output
 project/statics/js/

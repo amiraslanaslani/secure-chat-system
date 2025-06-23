@@ -26,10 +26,18 @@ class ConstantsTest extends TestCase {
         \Aslan\Chat\Config::setPdoDsn('sqlite:mock_db.sqlite');
         \Aslan\Chat\Config::setChatTable('mock_table');
         \Aslan\Chat\Config::setChatDefaultChannel('mockchan');
+        \Aslan\Chat\Config::setIsOnlyAllowedChannels(true);
+        \Aslan\Chat\Config::setAllowedChannels(['test1', 'test2']);
+        \Aslan\Chat\Config::setPrivateChannelPassword(['test1' => 'pass1', 'test2' => 'pass2']);
+        
         $this->assertEquals('/mock/path/', \Aslan\Chat\Config::getApiPrefixPath());
         $this->assertEquals('sqlite:mock_db.sqlite', \Aslan\Chat\Config::getPdoDsn());
         $this->assertEquals('mock_table', \Aslan\Chat\Config::getChatTable());
         $this->assertEquals('mockchan', \Aslan\Chat\Config::getChatDefaultChannel());
+        $this->assertEquals(true, \Aslan\Chat\Config::isOnlyAllowedChannels());
+        $this->assertEquals(['test1', 'test2'], \Aslan\Chat\Config::getAllowedChannels());
+        $this->assertEquals(['test1' => 'pass1', 'test2' => 'pass2'], \Aslan\Chat\Config::getPrivateChannelPassword());
+        
         \Aslan\Chat\Config::reset();
         $this->assertEquals(self::DEFAULT_API_PREFIX, \Aslan\Chat\Config::getApiPrefixPath());
         $this->assertEquals(self::DEFAULT_DB_FILE, \Aslan\Chat\Config::getPdoDsn());
@@ -45,14 +53,25 @@ class ConstantsTest extends TestCase {
         \Aslan\Chat\Config::setPdoDsn('');
         \Aslan\Chat\Config::setChatTable('');
         \Aslan\Chat\Config::setChatDefaultChannel('');
+        \Aslan\Chat\Config::setIsOnlyAllowedChannels(false);
+        \Aslan\Chat\Config::setAllowedChannels([]);
+        \Aslan\Chat\Config::setPrivateChannelPassword([]);
+        
         $this->assertEquals('', \Aslan\Chat\Config::getApiPrefixPath());
         $this->assertEquals('', \Aslan\Chat\Config::getPdoDsn());
         $this->assertEquals('', \Aslan\Chat\Config::getChatTable());
         $this->assertEquals('', \Aslan\Chat\Config::getChatDefaultChannel());
+        $this->assertEquals(false, \Aslan\Chat\Config::isOnlyAllowedChannels());
+        $this->assertEquals([], \Aslan\Chat\Config::getAllowedChannels());
+        $this->assertEquals([], \Aslan\Chat\Config::getPrivateChannelPassword());
+        
         \Aslan\Chat\Config::reset();
         $this->assertEquals(self::DEFAULT_API_PREFIX, \Aslan\Chat\Config::getApiPrefixPath());
         $this->assertEquals(self::DEFAULT_DB_FILE, \Aslan\Chat\Config::getPdoDsn());
         $this->assertEquals(self::DEFAULT_TABLE, \Aslan\Chat\Config::getChatTable());
         $this->assertEquals(self::DEFAULT_CHANNEL, \Aslan\Chat\Config::getChatDefaultChannel());
+        $this->assertEquals(false, \Aslan\Chat\Config::isOnlyAllowedChannels());
+        $this->assertEquals([Constants::CHAT_DEFAULT_CHANNEL], \Aslan\Chat\Config::getAllowedChannels());
+        $this->assertEquals(Constants::PRIVATE_CHANNEL_PASSWORD, \Aslan\Chat\Config::getPrivateChannelPassword());
     }
 } 

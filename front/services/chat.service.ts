@@ -1,8 +1,9 @@
 import { ChatMessage, SendMessagePayload } from '../types/index.js';
-import { ApiService } from './api.service.js';
+import { ApiService, ApiError } from './api.service.js';
 import { DOMService } from './dom.service.js';
 import { SettingsService } from './settings.service.js';
 import { EncryptionService } from './encryption.service.js';
+import { VaultService } from './vault.service.js';
 
 export class ChatService {
   private domService: DOMService;
@@ -20,6 +21,7 @@ export class ChatService {
     this.lastIndex = 0;
     this.encryptedMessages = [];
     this.domService.clearMessages();
+    await this.checkForPassword();
     await this.fetchMessages();
   }
 
@@ -41,6 +43,20 @@ export class ChatService {
     }
   }
 
+  async checkForPassword(): Promise<void> {
+    let isNeedAuth = await ApiService.isNeedAuth(SettingsService.channel);
+    if(isNeedAuth) {
+      let password = await this.domService.getChannelPasswordFromUser();
+      if(password){
+        if(await ApiService.isAuthCorrect(SettingsService.channel, password)){
+          await VaultService.setPassword(SettingsService.channel, password);
+        } else {
+          this.checkForPassword();
+        }
+      }
+    }
+  }
+
   async retryDecryptAllMessages(): Promise<void> {
     this.domService.clearMessages();
     const formData = this.domService.getFormData();
@@ -55,7 +71,8 @@ export class ChatService {
     if (this.fetchIntervalId) {
       clearInterval(this.fetchIntervalId);
     }
-    this.fetchMessages()
+    this.checkForPassword();
+    this.fetchMessages();
     this.fetchIntervalId = window.setInterval(
       () => this.fetchMessages(),
       SettingsService.messageInterval
@@ -101,8 +118,16 @@ export class ChatService {
         alert(result.error || 'Failed to send message.');
       }
     } catch (error) {
-      this.domService.setSendButtonLoading(false);
       this.msgSendLock = false;
+      this.domService.setSendButtonLoading(false);
+
+      if (error instanceof ApiError){
+        if(error.status == 401) {
+          this.checkForPassword();
+          return
+        }
+      }
+
       alert('Error sending message.');
       console.error(error);
     }
