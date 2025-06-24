@@ -1,6 +1,6 @@
-import { DOMElements } from '../types/index.js';
-import { hashColor, formatTime, calculateMessageWidth } from '../utils/helpers.js';
-import { EncryptionService } from './encryption.service.js';
+import { DOMElements } from '../types/index';
+import { hashColor, formatTime, calculateMessageWidth } from '../utils/helpers';
+import { EncryptionService } from './encryption.service';
 
 export class DOMService {
   private elements: DOMElements;

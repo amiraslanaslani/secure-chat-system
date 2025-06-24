@@ -11,12 +11,16 @@
     "build:css:watch": "sass --watch scss/main.scss project/statics/css/style.css",
     "watch": "tsc --watch",
     "dev": "tsc && sass scss/main.scss project/statics/css/style.css && serve .",
-    "clean": "rm -rf project/statics/js"
+    "clean": "rm -rf project/statics/js",
+    "test": "jest --detectOpenHandles --config ./tests/typescript/jest.config.cjs --roots ../../front"
   },
   "devDependencies": {
-    "typescript": "^5.8.3",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.0.2",
+    "sass": "^1.71.1",
     "serve": "^14.2.1",
-    "sass": "^1.71.1"
+    "ts-jest": "^29.4.0",
+    "typescript": "^5.8.3"
   },
   "keywords": [
     "chat",

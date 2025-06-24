@@ -1,9 +1,9 @@
-import { ChatMessage, SendMessagePayload } from '../types/index.js';
-import { ApiService, ApiError } from './api.service.js';
-import { DOMService } from './dom.service.js';
-import { SettingsService } from './settings.service.js';
-import { EncryptionService } from './encryption.service.js';
-import { VaultService } from './vault.service.js';
+import { ChatMessage, SendMessagePayload } from '../types/index';
+import { ApiService, ApiError } from './api.service';
+import { DOMService } from './dom.service';
+import { SettingsService } from './settings.service';
+import { EncryptionService } from './encryption.service';
+import { VaultService } from './vault.service';
 
 export class ChatService {
   private domService: DOMService;

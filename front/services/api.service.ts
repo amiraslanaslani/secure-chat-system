@@ -1,5 +1,5 @@
-import { ChatMessage, SendMessagePayload, ApiResponse } from '../types/index.js';
-import { VaultService } from './vault.service.js';
+import { ChatMessage, SendMessagePayload, ApiResponse } from '../types/index';
+import { VaultService } from './vault.service';
 
 export class ApiError extends Error {
   status: number;
