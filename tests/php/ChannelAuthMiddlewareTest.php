@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Psr7\Factory\ServerRequestFactory;
 use Slim\Psr7\Factory\ResponseFactory;
+use Aslan\Chat\Constants;
 
 class ChannelAuthMiddlewareTest extends TestCase
 {
@@ -416,5 +417,53 @@ class ChannelAuthMiddlewareTest extends TestCase
         $response = $this->middleware->process($request, $handler);
         
         $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    public function testOtherChannelsPasswordFallback()
+    {
+        // Set up password for OTHER_CHANNELS (fallback)
+        Config::setPrivateChannelPassword([
+            Constants::OTHER_CHANNELS => 'fallback-secret',
+            'explicit-channel' => 'explicit-secret',
+        ]);
+
+        // Request to a channel not explicitly listed (should use fallback password)
+        $request = $this->requestFactory->createServerRequest('GET', '/test?channel=not-in-list');
+        $token = base64_encode('fallback-secret');
+        $request = $request->withHeader('Authorization', 'Bearer ' . $token);
+
+        $handler = $this->createMock(RequestHandlerInterface::class);
+        $expectedResponse = $this->responseFactory->createResponse(200);
+        $handler->expects($this->once())
+                ->method('handle')
+                ->with($request)
+                ->willReturn($expectedResponse);
+
+        $response = $this->middleware->process($request, $handler);
+        $this->assertEquals(200, $response->getStatusCode());
+
+        // Request to a channel not explicitly listed with wrong token
+        $request2 = $this->requestFactory->createServerRequest('GET', '/test?channel=not-in-list');
+        $request2 = $request2->withHeader('Authorization', 'Bearer wrong-token');
+        $handler2 = $this->createMock(RequestHandlerInterface::class);
+        $handler2->expects($this->never())->method('handle');
+        $response2 = $this->middleware->process($request2, $handler2);
+        $this->assertEquals(401, $response2->getStatusCode());
+        $response2->getBody()->rewind();
+        $body = json_decode($response2->getBody()->getContents(), true);
+        $this->assertEquals('Unauthorized: Invalid or missing token.', $body['error']);
+
+        // Request to an explicitly listed channel (should use explicit password)
+        $request3 = $this->requestFactory->createServerRequest('GET', '/test?channel=explicit-channel');
+        $token3 = base64_encode('explicit-secret');
+        $request3 = $request3->withHeader('Authorization', 'Bearer ' . $token3);
+        $handler3 = $this->createMock(RequestHandlerInterface::class);
+        $expectedResponse3 = $this->responseFactory->createResponse(200);
+        $handler3->expects($this->once())
+                ->method('handle')
+                ->with($request3)
+                ->willReturn($expectedResponse3);
+        $response3 = $this->middleware->process($request3, $handler3);
+        $this->assertEquals(200, $response3->getStatusCode());
     }
 } 

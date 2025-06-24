@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Aslan\Chat\Config;
+use Aslan\Chat\Constants;
 
 class ChannelAuthMiddleware implements MiddlewareInterface {
     public function process(Request $request, RequestHandler $handler): Response {
@@ -27,6 +28,8 @@ class ChannelAuthMiddleware implements MiddlewareInterface {
         $requiredPassword = null;
         if (isset($passwords[$channel])) {
             $requiredPassword = $passwords[$channel];
+        } elseif (isset($passwords[Constants::OTHER_CHANNELS])){
+            $requiredPassword = $passwords[Constants::OTHER_CHANNELS];
         }
 
         if ($requiredPassword !== null) {
