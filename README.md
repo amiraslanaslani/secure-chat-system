@@ -12,7 +12,6 @@ A modern, secure chat application built with TypeScript that provides end-to-end
 
 ### Installation & Build
 
-## JS
 1. Install dependencies:
    ```bash
    npm install
