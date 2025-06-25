@@ -3,8 +3,7 @@ php-test:
 js-test:
 	npm run test
 js:
-	npm run clean
-	npm run build:js
+	npm run build:webpack
 css:
 	npm run build:css
 all: css js

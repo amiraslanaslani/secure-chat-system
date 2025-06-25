@@ -1,4 +1,4 @@
-import { ChatApp } from './app.js';
+import { ChatApp } from './app';
 
 // Initialize the application when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {

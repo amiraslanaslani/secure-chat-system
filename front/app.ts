@@ -1,6 +1,6 @@
-import { DOMElements } from './types/index.js';
-import { DOMService } from './services/dom.service.js';
-import { ChatService } from './services/chat.service.js';
+import { DOMElements } from './types/index';
+import { DOMService } from './services/dom.service';
+import { ChatService } from './services/chat.service';
 
 export class ChatApp {
   private domService: DOMService;

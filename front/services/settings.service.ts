@@ -1,4 +1,4 @@
-import { Settings } from '../types/index.js';
+import { Settings } from '../types/index';
 
 export class SettingsService {
   private static readonly STORAGE_KEYS = {
