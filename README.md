@@ -20,18 +20,9 @@ A modern, secure chat application built with TypeScript that provides end-to-end
    ```
 2. Build the TypeScript and SCSS:
    ```bash
-   npm run build
+   make js
+   make css
    ```
-   Or, to build JS and CSS separately:
-   ```bash
-   npm run build:js
-   npm run build:css
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-   This will build the project and serve it locally. By default, it uses the `serve` package to host the project directory.
 
 ## Usage Example
 
@@ -64,10 +55,16 @@ The application uses modern web APIs including:
 
 ## Running Tests
 
-To run backend unit tests (if applicable):
+To run backend unit tests:
 
 ```
-make test
+make php-test
+```
+
+To run frontend unit tests:
+
+```
+make js-test
 ```
 
 ## Security Notes
