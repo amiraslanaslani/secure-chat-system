@@ -8,7 +8,7 @@ use Aslan\Chat\DB as DB;
 class Chat {
     private $db;
 
-    public function __construct(DB $db=null) {
+    public function __construct(DB $db) {
         if(is_null($db)){
             $db = new DB();
         }
@@ -53,7 +53,7 @@ class Chat {
         $from = isset($params['from']) ? intval($params['from']) : 0;
         $channel = isset($params['channel']) ? trim($params['channel']) : Config::getChatDefaultChannel();
         
-        $messages = (new Chat())->get_msgs($channel, $from);
+        $messages = $this->get_msgs($channel, $from);
     
         $response->getBody()->write(json_encode($messages));
         return $response->withHeader('Content-Type', 'application/json');
@@ -78,7 +78,7 @@ class Chat {
             return $response->withStatus(404);
         }
 
-        $result = (new Chat())->send_msg($name, $message, $channel);
+        $result = $this->send_msg($name, $message, $channel);
         if($result) {
             $response->getBody()->write(json_encode(['success' => true]));
             return $response;
