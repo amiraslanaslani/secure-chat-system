@@ -5,12 +5,10 @@
   "main": "project/statics/js/main.js",
   "type": "module",
   "scripts": {
-    "build": "tsc && sass scss/main.scss project/statics/css/style.css",
-    "build:css": "sass scss/main.scss project/statics/css/style.css",
+    "build:css": "sass scss/chat/main.scss:project/statics/css/chat.css && sass scss/landing/main.scss:project/statics/css/landing.css",
     "build:js": "tsc",
-    "build:css:watch": "sass --watch scss/main.scss project/statics/css/style.css",
+    "build:css:watch": "sass --watch scss/chat/main.scss:project/statics/css/chat.css && sass --watch scss/landing/main.scss:project/statics/css/landing.css",
     "watch": "tsc --watch",
-    "dev": "tsc && sass scss/main.scss project/statics/css/style.css && serve .",
     "clean": "rm -rf project/statics/js",
     "test": "jest --detectOpenHandles --config ./tests/typescript/jest.config.cjs --roots ../../front"
   },

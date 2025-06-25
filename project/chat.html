@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Secure Chat</title>
+  <link rel="stylesheet" href="statics/css/chat.css" />
+</head>
+<body>
+  <div class="top-bar">
+    <span class="channel-name" id="channelName"></span>
+    <div class="settings-btn" id="settingsBtn"><img src="./statics/images/setting.png"/></div>
+  </div>
+  <div class="settings-modal" id="settingsModal" style="display:none;">
+    <div class="settings-content">
+      <h2>Settings</h2>
+      <form id="settingsForm">
+        <label for="interval">Message Fetch Interval (ms):</label>
+        <input type="number" id="interval" name="interval" min="500" step="100" required />
+        <br/>
+        <label for="channel">Channel:</label>
+        <input type="text" id="channel" name="channel" required />
+        <br/>
+        <button type="submit">Save</button>
+        <button type="button" id="closeSettings">Cancel</button>
+      </form>
+    </div>
+  </div>
+  <div class="settings-modal" id="passwordModal" style="display:none;">
+    <div class="settings-content">
+      <h2>Channel Password</h2>
+      <input type="password" id="passwordModalInput" placeholder="Enter channel password" required />
+      <div style="color:red;display:none;" id="passwordModalError">Password cannot be empty.</div>
+      <div style="margin-top:1rem;">
+        <button type="button" id="passwordModalConfirm">Confirm</button>
+        <button type="button" id="passwordModalCancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <div class="chat-wrapper">
+    <div class="messages" id="messages"></div>
+    <form id="chatForm" class="chat-form" autocomplete="off">
+      <div id="chat-trigger" class="open"><a> </a></div>
+      <input type="text" id="name" placeholder="Your name" required />
+      <input type="text" id="password" placeholder="Password" required />
+      <input type="text" id="message" placeholder="Your message" required />
+      <button type="submit" id="sendButton">➤</button>
+    </form>
+  </div>
+  <script type="module" src="statics/js/main.js"></script>
+</body>
+</html>

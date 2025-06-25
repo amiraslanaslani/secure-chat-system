@@ -1,0 +1,194 @@
+@use "sass:color";
+
+// Variables (customize as needed)
+$landing-bg-gradient: linear-gradient(135deg, #B3C8CF 0%, #6AA585 100%);
+$landing-card-bg: #fff;
+$landing-card-radius: 1.5rem;
+$landing-card-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+$landing-card-padding: 2.5rem 2rem 2rem 2rem;
+$landing-card-max-width: 420px;
+$landing-card-text: #333;
+$landing-accent: #6c838b;
+$landing-feature-bg: #B3C8CF;
+$landing-btn-bg: linear-gradient(90deg, #6AA585 0%, #B3C8CF 100%);
+$landing-btn-radius: 2rem;
+$landing-btn-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
+$motivation-bg: #f7f3e6;
+$motivation-color: #7a5d2b;
+$encryption-bg: #e6f7f1;
+$encryption-color: #2b5d4c;
+$instructions-bg: #f0f2f5;
+$instructions-color: #444;
+
+html, body {
+  min-height: 100vh;
+  background: $landing-bg-gradient;
+  font-family: system-ui, sans-serif;
+  margin: 0;
+}
+
+.landing-outer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2vw;
+
+  @media (max-width: 900px) {
+    padding: 4vw 0;
+  }
+  @media (max-width: 700px) {
+    display: block !important;
+    min-height: unset !important;
+    padding: 2.5rem 0 1.5rem 0;
+  }
+}
+
+.landing-card {
+  background: $landing-card-bg;
+  border-radius: $landing-card-radius;
+  box-shadow: $landing-card-shadow;
+  padding: $landing-card-padding;
+  max-width: $landing-card-max-width;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 1.2s cubic-bezier(.39,.575,.56,1.000) both;
+
+  h1 {
+    font-size: 2.3rem;
+    color: $landing-accent;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+  }
+  p {
+    color: $landing-card-text;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 900px) {
+    max-width: 90vw;
+  }
+  @media (max-width: 600px) {
+    padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+    max-width: 98vw;
+    h1 { font-size: 1.5rem; }
+  }
+  @media (max-width: 400px) {
+    padding: 0.5rem 0.1rem 1rem 0.1rem;
+    h1 { font-size: 1.1rem; }
+  }
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  @media (max-width: 600px) {
+    gap: 0.6rem;
+  }
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1rem;
+  color: $landing-accent;
+  justify-content: center;
+  @media (max-width: 600px) {
+    font-size: 0.95rem;
+  }
+}
+
+.feature-icon {
+  font-size: 1.5rem;
+  background: $landing-feature-bg;
+  border-radius: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.3rem;
+  @media (max-width: 600px) {
+    font-size: 1.1rem;
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+}
+
+.enter-chat-btn {
+  display: inline-block;
+  background: $landing-btn-bg;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 0.9rem 2.2rem;
+  border: none;
+  border-radius: $landing-btn-radius;
+  text-decoration: none;
+  box-shadow: $landing-btn-shadow;
+  transition: background 0.2s, background-position 0.2s, transform 0.2s;
+  margin-top: 0.5rem;
+  background-size: 200% 100%;
+  background-position: 0% 0%;
+  @media (max-width: 600px) {
+    font-size: 1rem;
+    padding: 0.7rem 1.2rem;
+  }
+  &:hover {
+    background-position: 100% 0%;
+    transform: translateY(-2px) scale(1.04);
+  }
+}
+
+.instructions-section {
+  text-align: left;
+  margin-bottom: 1.5rem;
+  background: $instructions-bg;
+  border-radius: 1rem;
+  padding: 1.2rem 1rem;
+  font-size: 1rem;
+  color: $instructions-color;
+}
+
+.encryption-section {
+  text-align: left;
+  margin-bottom: 2rem;
+  background: $encryption-bg;
+  border-radius: 1rem;
+  padding: 1.2rem 1rem;
+  font-size: 1rem;
+  color: $encryption-color;
+}
+
+.motivation-section {
+  text-align: left;
+  margin-bottom: 2rem;
+  background: $motivation-bg;
+  border-radius: 1rem;
+  padding: 1.2rem 1rem;
+  font-size: 1rem;
+  color: $motivation-color;
+  .github-link {
+    display: inline-block;
+    padding: 0.5rem 1.2rem;
+    background: $landing-accent;
+    color: #fff;
+    border-radius: 1.2rem;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.2s;
+    margin-top: 1rem;
+    &:hover {
+      background: color.adjust($landing-accent, $lightness: -10%);
+    }
+  }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: none; }
+} 

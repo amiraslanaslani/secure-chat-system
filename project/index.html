@@ -3,50 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Secure Chat</title>
-  <link rel="stylesheet" href="statics/css/style.css" />
+  <title>Welcome to Secure Chat</title>
+  <link rel="stylesheet" href="statics/css/landing.css" />
 </head>
 <body>
-  <div class="top-bar">
-    <span class="channel-name" id="channelName"></span>
-    <div class="settings-btn" id="settingsBtn"><img src="./statics/images/setting.png"/></div>
-  </div>
-  <div class="settings-modal" id="settingsModal" style="display:none;">
-    <div class="settings-content">
-      <h2>Settings</h2>
-      <form id="settingsForm">
-        <label for="interval">Message Fetch Interval (ms):</label>
-        <input type="number" id="interval" name="interval" min="500" step="100" required />
-        <br/>
-        <label for="channel">Channel:</label>
-        <input type="text" id="channel" name="channel" required />
-        <br/>
-        <button type="submit">Save</button>
-        <button type="button" id="closeSettings">Cancel</button>
-      </form>
-    </div>
-  </div>
-  <div class="settings-modal" id="passwordModal" style="display:none;">
-    <div class="settings-content">
-      <h2>Channel Password</h2>
-      <input type="password" id="passwordModalInput" placeholder="Enter channel password" required />
-      <div style="color:red;display:none;" id="passwordModalError">Password cannot be empty.</div>
-      <div style="margin-top:1rem;">
-        <button type="button" id="passwordModalConfirm">Confirm</button>
-        <button type="button" id="passwordModalCancel">Cancel</button>
+  <div class="landing-outer">
+    <div class="landing-card">
+      <h1>Welcome to Secure Chat</h1>
+      <p>Experience private, real-time messaging in secure, password-protected channels. Your privacy, our priority.</p>
+      <div class="features">
+        <div class="feature"><span class="feature-icon">🔒</span> End-to-end encrypted channels</div>
+        <div class="feature"><span class="feature-icon">⚡</span> Real-time, instant messaging</div>
+        <div class="feature"><span class="feature-icon">🛡️</span> Channel-based access with password</div>
+        <div class="feature"><span class="feature-icon">🎨</span> Modern, easy-to-use interface</div>
       </div>
+      <div style="text-align:left; margin-bottom:1.5rem; background:#f0f2f5; border-radius:1rem; padding:1.2rem 1rem; font-size:1rem; color:#444;">
+        <strong>How to Use Secure Chat:</strong>
+        <ol style="margin:0.7rem 0 0 1.2rem;">
+          <li>Click <b>Enter Chat</b> below to access the chat room.</li>
+          <li>Choose a <b>channel name</b> and <b>set a password</b> to create or join a private channel.</li>
+          <li>Share the channel name and password with your friends to chat together securely.</li>
+          <li>All messages are encrypted <b>before</b> they leave your device. Only those with the correct password can read them.</li>
+        </ol>
+      </div>
+      <div style="text-align:left; margin-bottom:2rem; background:#e6f7f1; border-radius:1rem; padding:1.2rem 1rem; font-size:1rem; color:#2b5d4c;">
+        <strong>About Client-Side Encryption:</strong>
+        <ul style="margin:0.7rem 0 0 1.2rem;">
+          <li>Messages are encrypted in your browser using your channel password <b>before</b> being sent to the server.</li>
+          <li>Decryption happens only on your device. <b>No one else</b> (not even server admins) can read your messages without the password.</li>
+          <li>Even if the server is compromised, your conversations remain private and secure.</li>
+          <li>This ensures <b>zero-knowledge privacy</b>: only you and those you trust have access to your messages.</li>
+        </ul>
+      </div>
+      <div style="text-align:left; margin-bottom:2rem; background:#f7f3e6; border-radius:1rem; padding:1.2rem 1rem; font-size:1rem; color:#7a5d2b;">
+        <strong>Project Motivation:</strong>
+        <p style="margin:0.7rem 0 0 0;">
+          This project is a personal experiment, developed by AI with a vibe coding approach, born from the need for an open-source, secure chat platform that truly embraces a zero-trust policy. With only one free week to dedicate, the goal was to create something simple and accessible—something anyone could deploy on a basic, affordable Linux shared host, which is why PHP was chosen. While it's not built to handle massive loads, it's a foundation for privacy-focused communication that can be improved with your help. If you have ideas or want to contribute, your input is very welcome!
+        </p>
+        <div style="margin-top:1rem;">
+          <a href="https://github.com/amiraslanaslani/secure-chat-system" target="_blank" rel="noopener" style="display:inline-block;padding:0.5rem 1.2rem;background:#6c838b;color:#fff;border-radius:1.2rem;text-decoration:none;font-weight:bold;transition:background 0.2s;">View on GitHub & Contribute 🚀</a>
+        </div>
+      </div>
+      <a href="chat.html" class="enter-chat-btn">Enter Chat</a>
     </div>
   </div>
-  <div class="chat-wrapper">
-    <div class="messages" id="messages"></div>
-    <form id="chatForm" class="chat-form" autocomplete="off">
-      <div id="chat-trigger" class="open"><a> </a></div>
-      <input type="text" id="name" placeholder="Your name" required />
-      <input type="text" id="password" placeholder="Password" required />
-      <input type="text" id="message" placeholder="Your message" required />
-      <button type="submit" id="sendButton">➤</button>
-    </form>
-  </div>
-  <script type="module" src="statics/js/main.js"></script>
 </body>
-</html>
+</html> 
