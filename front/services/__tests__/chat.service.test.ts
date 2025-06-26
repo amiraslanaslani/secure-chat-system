@@ -1,51 +1,52 @@
+import { describe, it, expect, vi, beforeEach, afterEach, beforeAll } from 'vitest';
 import { ChatService } from '../chat.service';
 
 const mockDomService = {
-  clearMessages: jest.fn(),
-  getFormData: jest.fn(() => ({ name: 'Alice', password: 'pw', message: 'hi' })),
-  renderMessage: jest.fn(),
-  scrollToBottom: jest.fn(),
-  setSendButtonLoading: jest.fn(),
-  clearMessageInput: jest.fn(),
-  getSettingsFormData: jest.fn(() => ({ messageInterval: 1000, channel: 'chan' })),
-  hideSettingsModal: jest.fn(),
-  updateChannelName: jest.fn(),
-  updateSettingsInputs: jest.fn(),
+  clearMessages: vi.fn(),
+  getFormData: vi.fn(() => ({ name: 'Alice', password: 'pw', message: 'hi' })),
+  renderMessage: vi.fn(),
+  scrollToBottom: vi.fn(),
+  setSendButtonLoading: vi.fn(),
+  clearMessageInput: vi.fn(),
+  getSettingsFormData: vi.fn(() => ({ messageInterval: 1000, channel: 'chan' })),
+  hideSettingsModal: vi.fn(),
+  updateChannelName: vi.fn(),
+  updateSettingsInputs: vi.fn(),
   nameInput: { value: '' },
   passwordInput: { value: '' },
   messageInput: { value: '' }
 };
 
-jest.mock('../api.service', () => ({
+vi.mock('../api.service', () => ({
   ApiService: {
-    fetchMessages: jest.fn(() => Promise.resolve([])),
-    isNeedAuth: jest.fn(() => Promise.resolve(false)),
-    isAuthCorrect: jest.fn(() => Promise.resolve(true)),
-    sendMessage: jest.fn(() => Promise.resolve({ success: true }))
+    fetchMessages: vi.fn(() => Promise.resolve([])),
+    isNeedAuth: vi.fn(() => Promise.resolve(false)),
+    isAuthCorrect: vi.fn(() => Promise.resolve(true)),
+    sendMessage: vi.fn(() => Promise.resolve({ success: true }))
   },
   ApiError: class extends Error { constructor(msg: string, public status: number) { super(msg); } }
 }));
 
-jest.mock('../settings.service', () => ({
+vi.mock('../settings.service', () => ({
   SettingsService: {
     channel: 'chan',
     messageInterval: 1000,
     rememberedName: 'Alice',
     rememberedPassword: 'pw',
-    getSettings: jest.fn(() => ({ messageInterval: 1000, channel: 'chan' })),
-    updateSettings: jest.fn()
+    getSettings: vi.fn(() => ({ messageInterval: 1000, channel: 'chan' })),
+    updateSettings: vi.fn()
   }
 }));
 
-jest.mock('../encryption.service', () => ({
+vi.mock('../encryption.service', () => ({
   EncryptionService: {
-    encrypt: jest.fn(() => Promise.resolve('encrypted'))
+    encrypt: vi.fn(() => Promise.resolve('encrypted'))
   }
 }));
 
-jest.mock('../vault.service', () => ({
+vi.mock('../vault.service', () => ({
   VaultService: {
-    setPassword: jest.fn()
+    setPassword: vi.fn()
   }
 }));
 
@@ -62,7 +63,7 @@ describe('ChatService', () => {
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     chat = new ChatService(mockDomService as any);
   });
 
@@ -75,32 +76,32 @@ describe('ChatService', () => {
   });
 
   it('restartFetchInterval clears and sets interval', () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     // @ts-ignore
     chat.fetchIntervalId = setInterval(() => {}, 1000);
-    chat.resetAndFetchMessages = jest.fn();
-    chat.fetchMessages = jest.fn();
+    chat.resetAndFetchMessages = vi.fn();
+    chat.fetchMessages = vi.fn();
     chat.restartFetchInterval();
     expect(chat.resetAndFetchMessages).toHaveBeenCalled();
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
   });
 
   it('sendMessage basic flow', async () => {
-    const event = { preventDefault: jest.fn() } as any;
+    const event = { preventDefault: vi.fn() } as any;
     await chat.sendMessage(event);
     expect(mockDomService.setSendButtonLoading).toHaveBeenCalledWith(true);
     expect(mockDomService.clearMessageInput).toHaveBeenCalled();
   });
 
   it('cleanup clears intervals and timers', () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     // @ts-ignore
     chat.fetchIntervalId = setInterval(() => {}, 1000);
     // @ts-ignore
     chat.passwordChangeTimer = setTimeout(() => {}, 1000);
     chat.cleanup();
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
   });
 }); 

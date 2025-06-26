@@ -1,15 +1,16 @@
 import { SettingsService } from '../settings.service';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 describe('SettingsService', () => {
   let store: Record<string, string> = {};
   beforeEach(() => {
     store = {};
     global.localStorage = {
-      getItem: jest.fn((key: string) => store[key] || null),
-      setItem: jest.fn((key: string, value: string) => { store[key] = value; }),
-      removeItem: jest.fn((key: string) => { delete store[key]; }),
-      clear: jest.fn(() => { store = {}; }),
-      key: jest.fn((index: number) => Object.keys(store)[index] || null),
+      getItem: vi.fn((key: string) => store[key] || null),
+      setItem: vi.fn((key: string, value: string) => { store[key] = value; }),
+      removeItem: vi.fn((key: string) => { delete store[key]; }),
+      clear: vi.fn(() => { store = {}; }),
+      key: vi.fn((index: number) => Object.keys(store)[index] || null),
       get length() { return Object.keys(store).length; }
     } as unknown as Storage;
   });

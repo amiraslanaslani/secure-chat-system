@@ -1,4 +1,5 @@
 import { hashColor, formatTime, calculateMessageWidth } from '../helpers';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 describe('hashColor', () => {
   it('returns a consistent color for the same name', () => {

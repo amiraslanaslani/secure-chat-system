@@ -1,13 +1,14 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ApiService } from '../api.service';
 
-global.fetch = jest.fn();
+global.fetch = vi.fn();
 
-jest.mock('../vault.service');
+vi.mock('../vault.service');
 
-const mockFetch = global.fetch as jest.Mock;
+const mockFetch = global.fetch as any;
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('ApiService', () => {

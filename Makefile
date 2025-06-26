@@ -4,7 +4,7 @@ php-test:
 	project/vendor/bin/phpunit --bootstrap tests/php/bootstrap.php tests/php
 
 js-test:
-	npm run test
+	npx vitest run -c tests/typescript/vitest.config.ts
 
 js:
 	npm run build:webpack
@@ -25,3 +25,9 @@ clean:
 install:
 	npm install
 	composer install
+
+js-coverage:
+	npx vitest run -c tests/typescript/vitest.config.ts --coverage
+
+php-coverage:
+	XDEBUG_MODE=coverage project/vendor/bin/phpunit --bootstrap tests/php/bootstrap.php --coverage-text --coverage-html=coverage -c phpunit.xml tests/php

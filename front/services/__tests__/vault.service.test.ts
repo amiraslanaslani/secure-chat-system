@@ -1,4 +1,5 @@
 import { VaultService } from '../vault.service';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 describe('VaultService', () => {
   beforeEach(() => {

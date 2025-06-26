@@ -1,4 +1,5 @@
 import { DOMService } from '../dom.service';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 describe('DOMService', () => {
   let elements: any;
@@ -6,7 +7,7 @@ describe('DOMService', () => {
 
   beforeEach(() => {
     elements = {
-      messagesDiv: { innerHTML: '', scrollTop: 0, scrollHeight: 100, appendChild: jest.fn() },
+      messagesDiv: { innerHTML: '', scrollTop: 0, scrollHeight: 100, appendChild: vi.fn() },
       nameInput: { value: 'Alice', style: { display: '' } },
       passwordInput: { value: 'pw', style: { display: '' } },
       messageInput: { value: 'hi' },
@@ -15,11 +16,11 @@ describe('DOMService', () => {
       settingsModal: { style: { display: '' } },
       intervalInput: { value: '1000' },
       channelInput: { value: 'chan' },
-      chatTrigger: { classList: { contains: jest.fn(), add: jest.fn(), remove: jest.fn() }, style: { display: '' } },
+      chatTrigger: { classList: { contains: vi.fn(), add: vi.fn(), remove: vi.fn() }, style: { display: '' } },
       passwordModal: { style: { display: '' } },
-      passwordModalInput: { value: '', focus: jest.fn() },
-      passwordModalConfirm: { addEventListener: jest.fn(), removeEventListener: jest.fn() },
-      passwordModalCancel: { addEventListener: jest.fn(), removeEventListener: jest.fn() },
+      passwordModalInput: { value: '', focus: vi.fn() },
+      passwordModalConfirm: { addEventListener: vi.fn(), removeEventListener: vi.fn() },
+      passwordModalCancel: { addEventListener: vi.fn(), removeEventListener: vi.fn() },
       passwordModalError: { style: { display: '' } }
     };
     service = new DOMService(elements);
