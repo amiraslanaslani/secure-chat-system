@@ -1,5 +1,9 @@
 # Secure Encrypted Chat Application
 
+[![Run Tests](https://github.com/amiraslanaslani/secure-chat-system/actions/workflows/test.yml/badge.svg)](https://github.com/amiraslanaslani/secure-chat-system/actions/workflows/test.yml)
+[![Release Tarball](https://github.com/amiraslanaslani/secure-chat-system/actions/workflows/release.yml/badge.svg)](https://github.com/amiraslanaslani/secure-chat-system/actions/workflows/release.yml)
+
+
 A modern, secure chat application built with TypeScript that provides end-to-end encryption for messages. This is a personal project designed primarily for deployment on shared Linux hosts using an Apache web server. While it is not intended for large-scale use—since it relies on simple polling for message updates—it is completely secure thanks to client-side encryption. All encryption and decryption happen in the browser, ensuring that only users with the correct password can read the messages.
 
 ## Setup
