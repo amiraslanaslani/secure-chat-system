@@ -5,8 +5,8 @@
   "main": "project/statics/js/main.js",
   "type": "module",
   "scripts": {
-    "build:css": "sass scss/chat/main.scss:project/statics/css/chat.css && sass scss/landing/main.scss:project/statics/css/landing.css",
-    "build:css:watch": "sass --watch scss/chat/main.scss:project/statics/css/chat.css && sass --watch scss/landing/main.scss:project/statics/css/landing.css",
+    "build:css": "sass --no-source-map scss/chat/main.scss:project/statics/css/chat.css scss/landing/main.scss:project/statics/css/landing.css",
+    "build:css:watch": "sass --no-source-map --watch scss/chat/main.scss:project/statics/css/chat.css scss/landing/main.scss:project/statics/css/landing.css",
     "watch": "tsc --watch",
     "clean": "rm -rf project/statics/js",
     "test": "jest --detectOpenHandles --config ./tests/typescript/jest.config.cjs --roots ../../front",
